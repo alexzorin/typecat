@@ -14,15 +14,9 @@ function dumpFont(font_name) {
 	/* May as well pretend we're chrome for the chrome targeted fonts */
 	page.settings.userAgent = 'Agent:Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31';
 
-	var font_count = 0;
-
 	/* Catch the font data in the 'data:' resource requested event */
 	page.onResourceRequested = function(reqData) {
-
 		if(reqData.url.indexOf(b64_header) === 0) {
-			// var file = fs.open(font_name + '-' + font_count++ + '.ttf', 'wb+');
-			// file.write(atob(reqData.url.slice(b64_header.length)));
-			// file.close();
 			font_bin.push(atob(reqData.url.slice(b64_header.length)));
 		}
 	};
@@ -35,7 +29,7 @@ function dumpFont(font_name) {
 		});
 	};
 
-	/* Hope that fonts were stored OK and mass rename to proper once dom ready (assumes typekit orders fonts - I think so, and that font downloads are done - also hopefully true) */
+	/* catch font names/weights/styles on the actual page and hope that the orders match (they do for now) */
 	page.onCallback = function() {
 		var titles = page.evaluate(function() {
 			return $("dt", ".font-variations").map(function(i,v) { return $(v).contents(':not(abbr)').text().trim().replace(' ', '_'); });
@@ -52,10 +46,8 @@ function dumpFont(font_name) {
 
 	page.open('https://typekit.com/fonts/' + font_name, function(status) {
 		if(status !== 'success') {
-			console.log('Failed', status);
-			phantom.exit();
+			console.log('Failed', status, font_name);
 		}
-
 	});
 
 }
