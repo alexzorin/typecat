@@ -8,8 +8,10 @@ Usage
 
 will generate `.ttf` files in the cwd, following a `font-name_[weight]_[style].ttf`.
 
+Demangling
+----------
 Ripped fonts seem like they don't work (at least in Windows) but a browser will properly parse them. If you need other tools to read them, try a [font converter][2] to fix the format. i.e:
-`curl -o unmangled.ttf -X POST -F "outputFormat=ttf" -F "submit=Convert" -F "fontFile=@mangled.ttf" http://www.freefontconverter.com/index.php`
+`curl -o out.ttf -X POST -F "outputFormat=ttf" -F "fontFile=@mangled.ttf" http://www.freefontconverter.com/index.php`
 
 Disclaimer/Pirating
 -------------------
